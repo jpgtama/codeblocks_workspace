@@ -8,27 +8,47 @@ enum Token_Type{
 
 // PLUS='+', MINUS='-', MUL='*', DIV='/', PRINT=';', ASSIGN='=', LP='(', RP=')'
 
-
-template<class T> struct Token{
+// template<class T>
+ struct Token{
     Token_Type type;
-    T value;
+    void* value;
 };
 
+string symbolScope = "+-*/=()";
+bool is_Symbol(char& ch);
 
+string numberScope = "0123456789.";
+bool is_Number(char& ch);
+
+// TODO use regex to do this namescope
+string nameScope = "abc";
+bool is_Name(char& ch);
+
+bool is_InScope(string& scope, char& ch);
+
+Token  get_next_token();
 
 int main()
 {
 
 
-    Token<double> t = {NUMBER, 2323.234};
+    Token t = get_next_token();
 
-    cout<< t.type << ", " << t.value << endl;
+    if(t.type == NUMBER){
+        double* pnum = (double*)t.value;
+        cout<< t.type << ", " << *pnum << endl;
+    }else if(t.type == SYMBOL){
+        // TODO
+    } else if(t.type == NAME){
+        // TODO
+    }else if(t.type == END){
+        // TODO
+    }else if(t.type == ERROR){
+        // TODO
+    }
 
-    string symbol = "+-*/";
 
-    bool found = symbol.find('+') != string::npos;
 
-    cout << "find: " << found << endl;
 
     return 0;
 }
@@ -41,20 +61,44 @@ Token  get_next_token(){
     cin >> ch;
 
     if(ch == 0){
-        return Token<int> t = {END, 0};
+        Token t = {END, 0};
+        return t;
     }else if(is_Symbol(ch)){
-        return Token<char>t = {SYMBOL, ch};
+        Token t = {SYMBOL, &ch};
+        return t;
     }else if(is_Number(ch)){
         cin.putback(ch);
         cin >> num;
-        return Token<double> t = {NUMBER, num};
+        Token  t = {NUMBER, &num};
+        return t;
     }else if(is_Name(ch)){
         cin.putback(ch);
         cin >>name;
-        return Token<string> t = {NAME, name};
+        Token  t = {NAME, &name};
+        return t;
     }else{
         cerr << "invalid input ->: " << ch << endl;
-        return Token<void> t = {ERROR};
+        Token  t = {ERROR};
+        return t;
     }
 
+}
+
+bool is_Symbol(char& ch){
+    return is_InScope(symbolScope, ch);
+    //return symbolScope.find(ch) != string::npos;
+}
+
+bool is_Number(char& ch){
+    return is_InScope(numberScope, ch);
+    //return numberScope.find(ch) != string::npos;
+}
+
+bool is_Name(char& ch){
+    return is_InScope(nameScope, ch);
+    //return nameScope.find(ch) != string::npos;
+}
+
+bool is_InScope(string& scope, char& ch){
+    return scope.find(ch) != string::npos;
 }
