@@ -1,9 +1,11 @@
 #include <iostream>
+#include <string>
+#include <regex>
 
 using namespace std;
 
 enum Token_Type{
-    NAME, NUMBER, END, SYMBOL, ERROR
+    NAME, NUMBER, SYMBOL, END,  ERROR
 };
 
 // PLUS='+', MINUS='-', MUL='*', DIV='/', PRINT=';', ASSIGN='=', LP='(', RP=')'
@@ -22,6 +24,8 @@ bool is_Number(char& ch);
 
 // TODO use regex to do this namescope
 string nameScope = "abc";
+regex nameRegex("\\w+");
+
 bool is_Name(char& ch);
 
 bool is_InScope(string& scope, char& ch);
@@ -95,7 +99,7 @@ bool is_Number(char& ch){
 }
 
 bool is_Name(char& ch){
-    return is_InScope(nameScope, ch);
+    return regex_match(ch, nameRegex);
     //return nameScope.find(ch) != string::npos;
 }
 

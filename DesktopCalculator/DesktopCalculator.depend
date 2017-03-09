@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1489064778 source:d:\workspace\codeblocks_workspace\desktopcalculator\hello_regex.cpp
+	<iostream>
+	<regex>
+
+1489065198 source:d:\workspace\codeblocks_workspace\desktopcalculator\main.cpp
+	<iostream>
+	<string>
+
