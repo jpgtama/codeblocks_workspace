@@ -44,44 +44,30 @@ bool isUppercase(char& ch){
 int main()
 {
 
-//    char ch[] = {'a', 0};
-//
-//    cout << ch << endl;
 
 
-    char ch;
-    while(cin){
-        cin >> ch;
 
-        if(ch == '0'){
-            break;
-        }else{
-//            cout << "is lower case: " << isLoweercase(ch) << endl;
-//            cout << "is upper case: " << isUppercase(ch) << endl;
-              cout << "is name: " << is_Name(ch) << endl;
-        }
+
+
+    Token t = get_next_token();
+
+    if(t.type == NUMBER){
+        double* pnum = (double*)t.value;
+        cout<< t.type << ", " << *pnum << endl;
+    }else if(t.type == SYMBOL){
+        char* ch = (char*) t.value;
+        cout << t.type << ", " << *ch << endl;
+        // TODO
+    } else if(t.type == NAME){
+        string* s = (string*)t.value;
+        // TODO why below is working?
+        cout << t.type << ", " << s->c_str() << endl;
+        // TODO
+    }else if(t.type == END){
+        // TODO
+    }else if(t.type == ERROR){
+        // TODO
     }
-
-
-
-
-
-
-//
-//    Token t = get_next_token();
-//
-//    if(t.type == NUMBER){
-//        double* pnum = (double*)t.value;
-//        cout<< t.type << ", " << *pnum << endl;
-//    }else if(t.type == SYMBOL){
-//        // TODO
-//    } else if(t.type == NAME){
-//        // TODO
-//    }else if(t.type == END){
-//        // TODO
-//    }else if(t.type == ERROR){
-//        // TODO
-//    }
 
 
 
@@ -92,7 +78,7 @@ int main()
 Token  get_next_token(){
     char ch = 0;
     double num;
-    string name;
+    string str;
 
     cin >> ch;
 
@@ -109,8 +95,9 @@ Token  get_next_token(){
         return t;
     }else if(is_Name(ch)){
         cin.putback(ch);
-        cin >>name;
-        Token  t = {NAME, &name};
+        cin >>str;
+//        const char* cstr = str.c_str();
+        Token  t = {NAME, &str};
         return t;
     }else{
         cerr << "invalid input ->: " << ch << endl;
@@ -131,6 +118,7 @@ bool is_Number(char& ch){
 }
 
 bool is_Name(char& ch){
+    // TODO need to find out how to release memory
     char str[] = {ch, 0};
     return regex_match(str, nameRegex);
 //    return nameScope.find(ch) != string::npos;
